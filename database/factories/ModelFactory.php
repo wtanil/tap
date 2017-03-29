@@ -23,9 +23,22 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+
 $factory->define(App\Category::class, function (Faker\Generator $faker) {
 
     return [
-        'name' => $faker->name,
+        'name' => $faker->sentence,
+    ];
+});
+
+
+$factory->define(App\Image::class, function (Faker\Generator $faker) {
+
+    return [
+        'project_id' => 1,
+        'subtitle' => $faker->sentence,
+        'low_res_url' => $faker->url,
+        'high_res_url' => $faker->url,
+
     ];
 });

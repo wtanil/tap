@@ -30,6 +30,20 @@ class ContractServiceProvider extends ServiceProvider
             'App\Repositories\CategoryRepository'
 
             );
+
+        $this->app->bind(
+
+            'App\Contracts\ImageInterface',
+            'App\Repositories\ImageRepository'
+
+            );
+
+        $this->app->bind(
+
+            'App\Contracts\ProjectInterface',
+            'App\Repositories\ProjectInterface'
+
+            );
     }
 
 }
