@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddThumbnailToProjectsTable extends Migration
+class AddActiveToProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddThumbnailToProjectsTable extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->integer('thumbnail_id')->nullable()->unsigned()->after('id');
-            $table->foreign('thumbnail_id')->references('id')->on('images');
+            $table->boolean('active')->after('project_date')->default(false);
         });
     }
 
@@ -27,8 +26,7 @@ class AddThumbnailToProjectsTable extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->dropForeign(['thumbnail_id']);
-            $table->dropColumn(['thumbnail_id']);
+            $table->dropColumn(['active']);
         });
     }
 }

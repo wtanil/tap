@@ -41,7 +41,7 @@ class ContractServiceProvider extends ServiceProvider
         $this->app->bind(
 
             'App\Contracts\ProjectInterface',
-            'App\Repositories\ProjectInterface'
+            'App\Repositories\ProjectRepository'
 
             );
     }

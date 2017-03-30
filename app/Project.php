@@ -23,7 +23,9 @@ class Project extends Model
     */
     public function thumbnail() {
 
-        return $this->hasOne('App\Image', 'thumbnail_id', 'id');
+        return $this->belongsTo('App\Image', 'thumbnail_id', 'id');
+
+        // return $this->hasOne('App\Image', 'thumbnail_id', 'id');
 
     }
 

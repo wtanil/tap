@@ -42,3 +42,18 @@ $factory->define(App\Image::class, function (Faker\Generator $faker) {
 
     ];
 });
+
+$factory->define(App\Project::class, function (Faker\Generator $faker) {
+
+    return [
+        'category_id' => 1,
+        'thumbnail_id' => 1,
+        'title' => $faker->sentence,
+        'project_date' => $faker->date,
+
+    ];
+});
+
+
+
+

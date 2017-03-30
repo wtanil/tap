@@ -35,10 +35,16 @@ class ImageRepository implements ImageInterface {
 	*	@param int $projectId
 	*	@return bool
 	*/
-	function create(Request $request, $projectId) {
+	function create(Request $request) {
 
-		return true;
+		$image = new Image();
 
+		$image->project_id = $request->input('projectId');
+		$image->subtitle = $request->input('subtitle');
+		$image->low_res_url = $request->input('lowResUrl');
+		$image->high_res_url = $request->input('highResUrl');
+
+		return $image->save();
 	}
 
 	/**
@@ -46,12 +52,15 @@ class ImageRepository implements ImageInterface {
 	*
 	*	@param \Illuminate\Http\Request $request
 	*	@param int $id
-	*	@param int $projectId
 	*	@return App\Image
 	*/
-	function update(Request $request, $id, $projectId) {
+	function update(Request $request, $id) {
 
-		return null;
+		$image = $this->forId($id);
+
+		$image->subtitle = $request->input('subtitle');
+
+		return $image->save();
 
 	}
 
@@ -59,7 +68,6 @@ class ImageRepository implements ImageInterface {
 	*	Delete an image by ID
 	*
 	*	@param int $id
-	*	@param int $projectId
 	*	@return bool
 	*/
 	function delete($id) {

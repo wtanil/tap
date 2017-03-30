@@ -25,26 +25,23 @@ interface ImageInterface {
 	*	Store a new image
 	*
 	*	@param \Illuminate\Http\Request $request
-	*	@param int $projectId
 	*	@return bool
 	*/
-	function create(Request $request, $projectId);
+	function create(Request $request);
 
 	/**
 	*	Update an image by ID
 	*
 	*	@param \Illuminate\Http\Request $request
 	*	@param int $id
-	*	@param int $projectId
 	*	@return App\Image
 	*/
-	function update(Request $request, $id, $projectId);
+	function update(Request $request, $id);
 
 	/**
 	*	Delete an image by ID
 	*
 	*	@param int $id
-	*	@param int $projectId
 	*	@return bool
 	*/
 	function delete($id);
