@@ -14,7 +14,17 @@ class ProjectRepository implements ProjectInterface {
 	*   @return \Illuminate\Database\Eloquent\Collection
 	*/
 	function all() {
-		return Project::all();
+		// return Project::all();
+
+		return Project::with(array(
+			'category' => function($query) {
+				$query->select('id', 'name');
+			},
+			'thumbnail' => function($query) {
+				$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
+			},
+
+			))->get();
 	}
 
 	/**
@@ -25,7 +35,40 @@ class ProjectRepository implements ProjectInterface {
 	*/
 	function forId($id) {
 		return Project::find($id);
+
+		// return Project::with(array(
+		// 	'category' => function($query) {
+		// 		$query->select('id', 'name');
+		// 	},
+		// 	'images' => function($query) {
+		// 		$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
+		// 	},
+
+		// 	))
+		// 	->where('id', '=', $id)
+		// 	->get();
 	}
+
+	/**
+	*	Get project details by ID
+	*
+	*	@param  int  $id
+	*	@return \Illuminate\Database\Eloquent\Collection
+	*/
+	function getDetails($id) {
+
+		return Project::with(array(
+			'category' => function($query) {
+				$query->select('id', 'name');
+			},
+			'images' => function($query) {
+				$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
+			},
+
+			))
+			->where('id', '=', $id)
+			->first();
+		}
 
 	/**
 	*	Get images for project by ID
@@ -61,7 +104,7 @@ class ProjectRepository implements ProjectInterface {
 	*	Store a new project
 	*
 	*	@param \Illuminate\Http\Request $request
-	*	@return bool
+	*	@return int
 	*/
 	function create(Request $request) {
 
@@ -71,7 +114,9 @@ class ProjectRepository implements ProjectInterface {
 		$project->title = $request->input('title');
 		$project->project_date = $request->input('projectDate');
 
-		return $project->save();
+		$project->save();
+
+		return $project->id;
 		
 	}
 
@@ -87,10 +132,8 @@ class ProjectRepository implements ProjectInterface {
 		$project = $this->forId($id);
 
 		$project->category_id = $request->input('categoryId');
-		$project->thumbnail_id = $request->input('thumbnailId');
 		$project->title = $request->input('title');
 		$project->project_date = $request->input('projectDate');
-		$project->active = $request->input('active');
 
 		return $project->save();
 		
@@ -101,13 +144,34 @@ class ProjectRepository implements ProjectInterface {
 	*
 	*	@param boolean $active
 	*	@param int $id
-	*	@return App\Project
+	*	@return boolean
 	*/
 	function setActive($active, $id) {
 		$project = $this->forId($id);
 
-		$project->active = $active;
+		if ($active) {
+			if (is_null($project->thumbnail_id)) {
+				return false;
+			}
+		}
 
+		$project->active = $active;
+		$project->save();
+
+		return true;
+	}
+
+	/**
+	*	Set project thumbnail by ID
+	*
+	*	@param int $thumbnail_id
+	*	@param int $id
+	*	@return boolean
+	*/
+	function setThumbnail($thumbnail_id, $id) {
+		$project = $this->forId($id);
+
+		$project->thumbnail_id = $thumbnail_id;
 		return $project->save();
 	}
 

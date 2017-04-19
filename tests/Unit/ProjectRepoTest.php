@@ -60,6 +60,16 @@ class ProjectRepoTest extends TestCase
     }
 
     /**
+     *  @group projectrepo
+     *  @return void
+     */
+    // public function test_get_images() {
+    //     $repo = new ProjectRepository();
+    //     $factory = factory(Project::class)->create();
+
+    // }
+
+    /**
      *	@group projectrepo
      * 	@return void
      */
@@ -116,9 +126,12 @@ class ProjectRepoTest extends TestCase
             'projectDate' => '2017-01-01',
             ]);
         $repo = new ProjectRepository();
-        $isCreated = $repo->create($request);
+        $createdId = $repo->create($request);
+        $this->assertEquals(1, $createdId);
 
-        $this->assertTrue($isCreated);
+        // $isCreated = $repo->create($request);
+        // $this->assertTrue($isCreated);
+
         $dbProject = $repo->all();
         $this->assertCount(1, $dbProject);
 
@@ -157,8 +170,8 @@ class ProjectRepoTest extends TestCase
     	$repo = new ProjectRepository();
         $factory = factory(Project::class)->create();
 
-        $repo->setActive(true, 1);
-
+        $isActive = $repo->setActive(true, 1);
+        $this->assertTrue($isActive);
         $dbProject = $repo->forId(1);
         $this->assertEquals(1, $dbProject->active);
 	}

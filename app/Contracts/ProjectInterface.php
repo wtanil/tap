@@ -22,6 +22,14 @@ interface ProjectInterface {
 	function forId($id);
 
 	/**
+	*	Get project details by ID
+	*
+	*	@param  int  $id
+	*	@return \Illuminate\Database\Eloquent\Collection
+	*/
+	function getDetails($id);
+
+	/**
 	*	Get images for project by ID
 	*
 	*	@param  int  $id
@@ -49,7 +57,7 @@ interface ProjectInterface {
 	*	Store a new project
 	*
 	*	@param \Illuminate\Http\Request $request
-	*	@return bool
+	*	@return int
 	*/
 	function create(Request $request);
 
@@ -67,7 +75,7 @@ interface ProjectInterface {
 	*
 	*	@param boolean $active
 	*	@param int $id
-	*	@return App\Project
+	*	@return boolean
 	*/
 	function setActive($active, $id);
 

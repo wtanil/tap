@@ -33,18 +33,23 @@ class ImageRepository implements ImageInterface {
 	*
 	*	@param \Illuminate\Http\Request $request
 	*	@param int $projectId
+	*	@param String $param
+	*	@param String $low_res_url
+	*	@param String $high_res_url
 	*	@return bool
 	*/
-	function create(Request $request) {
+	function create(Request $request, $path, $low_res_url, $high_res_url) {
 
 		$image = new Image();
 
 		$image->project_id = $request->input('projectId');
-		$image->subtitle = $request->input('subtitle');
-		$image->low_res_url = $request->input('lowResUrl');
-		$image->high_res_url = $request->input('highResUrl');
+		$image->subtitle = $request->input('description');
+		$image->path = $path;
+		$image->low_res_url = $low_res_url;
+		$image->high_res_url = $high_res_url;
 
-		return $image->save();
+		$image->save();
+		return $image->id;
 	}
 
 	/**
@@ -58,7 +63,7 @@ class ImageRepository implements ImageInterface {
 
 		$image = $this->forId($id);
 
-		$image->subtitle = $request->input('subtitle');
+		$image->subtitle = $request->input('description');
 
 		return $image->save();
 

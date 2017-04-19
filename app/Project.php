@@ -9,8 +9,14 @@ class Project extends Model
 
     protected $table = 'projects';
 
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'project_date'
+    ];
+
     /**
-     * Get the records for the images
+     * Get the images for the project
     */
     public function images() {
 
@@ -19,13 +25,13 @@ class Project extends Model
     }
 
     /**
-     * Get the records for the user
+     * Get the thumbnail for the project
     */
     public function thumbnail() {
 
-        return $this->belongsTo('App\Image', 'thumbnail_id', 'id');
+        // return $this->belongsTo('App\Image', 'thumbnail_id', 'id');
 
-        // return $this->hasOne('App\Image', 'thumbnail_id', 'id');
+        return $this->hasOne('App\Image', 'id', 'thumbnail_id');
 
     }
 

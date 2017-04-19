@@ -12,7 +12,8 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'The Atelier',
+    // 'name' => 'Laravel',
 
     /*
     |--------------------------------------------------------------------------
@@ -176,6 +177,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ContractServiceProvider::class,
+
+        // intervention.io
+        Intervention\Image\ImageServiceProvider::class,
 
     ],
 
@@ -225,6 +230,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'ImageIntevention' => Intervention\Image\Facades\Image::class,
 
     ],
 
