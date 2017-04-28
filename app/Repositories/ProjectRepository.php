@@ -24,7 +24,30 @@ class ProjectRepository implements ProjectInterface {
 				$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
 			},
 
-			))->get();
+			))
+			->get();
+	}
+
+	/**
+	*   Get all projects
+	*
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function allApi() {
+		// return Project::all();
+
+		return Project::with(array(
+			'category' => function($query) {
+				$query->select('id', 'name');
+			},
+			'thumbnail' => function($query) {
+				$query->select('id', 'project_id', 'low_res_url');
+			},
+
+			))
+			->select('id', 'category_id', 'thumbnail_id', 'title')
+			->where('active', 1)
+			->get();
 	}
 
 	/**
@@ -47,6 +70,25 @@ class ProjectRepository implements ProjectInterface {
 		// 	))
 		// 	->where('id', '=', $id)
 		// 	->get();
+	}
+
+	/**
+	*	Get a project by ID
+	*
+	*	@param  int  $id
+	*	@return App\Project
+	*/
+	function forIdApi($id) {
+
+		return Project::with(array(
+			'images' => function($query) {
+				$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
+			}))
+			->select('id', 'title', 'active')
+			->where('id', $id)
+			->where('active', 1)
+			->first();
+		;
 	}
 
 	/**

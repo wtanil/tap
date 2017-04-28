@@ -14,12 +14,27 @@ interface ProjectInterface {
 	function all();
 
 	/**
+	*   Get all projects
+	*
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function allApi();
+
+	/**
 	*	Get a project by ID
 	*
 	*	@param  int  $id
 	*	@return App\Project
 	*/
 	function forId($id);
+
+	/**
+	*	Get a project by ID
+	*
+	*	@param  int  $id
+	*	@return App\Project
+	*/
+	function forIdApi($id);
 
 	/**
 	*	Get project details by ID

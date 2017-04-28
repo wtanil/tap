@@ -37,9 +37,9 @@
                     <div class="col-xs-12 col-sm-8">
                         <strong>Status:</strong>
                         @if($project->active == 1)
-                        Active
+                        Active <a href="{{ url('project/' . $project->id . '/active/0') }}">(set Inactive)</a>
                         @else
-                        <span class="text-danger">Inactive</span>
+                        <span class="text-danger">Inactive</span> <a href="{{ url('project/' . $project->id . '/active/1') }}">(set Active)</a>
                         @endif
                         <br>
                         <strong>Category:</strong> {{$project->category->name}}

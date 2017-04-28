@@ -129,6 +129,7 @@ class ProjectController extends Controller
     /**
      * Update the status of the resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $active
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -138,7 +139,9 @@ class ProjectController extends Controller
 
         $this->project->setActive($active, $id);
 
-        return redirect('/project/' . $id . '/edit');
+        // return redirect('/project/' . $id . '/edit');
+        // return back();
+        return redirect(url()->previous() . '#project' . $id);
     }
 
     /**
