@@ -53,6 +53,10 @@ class HomeController extends Controller
 
     }
 
+    public function createCategory (Request $request) {
+        $this->category->create($request);
+    }
+
 
 }
 

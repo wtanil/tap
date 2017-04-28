@@ -38,6 +38,8 @@ Route::get('/project/{id}/active/{active}', 'ProjectController@updateActive');
 Route::put('/project/{id}/thumbnail', 'ProjectController@updateThumbnail');
 Route::delete('/project/{id}', 'ProjectController@destroy');
 
+// Route::get('/category/store', 'HomeController@createCategory');
+
 
 Route::get('/project/{id}/images/create', 'ImageController@create');
 Route::post('/project/{id}/images', 'ImageController@store');
