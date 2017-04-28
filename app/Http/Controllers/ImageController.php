@@ -105,7 +105,7 @@ class ImageController extends Controller
 
         $createdId = $this->image->create($request, $path, $lowResUrl, $highResUrl);
 
-        return redirect('/project/' . $id . '/edit');
+        return redirect('/project/' . $id . '/images/create');
     }
 
     /**

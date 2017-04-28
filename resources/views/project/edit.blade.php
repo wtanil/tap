@@ -117,7 +117,7 @@
 			</div>
 			<div class="panel-body">
 
-				<a class="btn btn-primary" href="{{ url('project/' . $project->id . '/images/create') }}" role="button">Add a image</a>
+				<a class="btn btn-primary" href="{{ url('project/' . $project->id . '/images/create') }}" role="button">Add image</a>
 				<br><br>
 
 				<table class="table table-hover">
