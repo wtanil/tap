@@ -22,6 +22,16 @@ interface CategoryInterface {
 	function forId($id);
 
 	/**
+	*	Get projects for category by ID
+	*
+	*	@param  int  $id
+	*	@param  String  $sortBy
+	*	@param  String  $sortBy
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function getProjects($id, $sortBy, $order);
+
+	/**
 	*	Store a new category
 	*
 	*	@param \Illuminate\Http\Request $request

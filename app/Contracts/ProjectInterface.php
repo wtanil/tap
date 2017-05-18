@@ -102,6 +102,23 @@ interface ProjectInterface {
 	*/
 	function delete($id);
 
+	/**
+	*	Search project by title
+	*
+	*	@param String $title
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function search($title);
+
+	/**
+	*   Get all projects sorted
+	*
+	*	@param String $sortBy
+	*	@param String $order
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function allSorted($sortBy, $order);
+
 }
 
 

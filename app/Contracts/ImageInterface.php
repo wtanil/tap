@@ -26,12 +26,14 @@ interface ImageInterface {
 	*
 	*	@param \Illuminate\Http\Request $request
 	*	@param int $projectId
-	*	@param String $param
+	*	@param String $path
+	*	@param String $path_low
 	*	@param String $low_res_url
 	*	@param String $high_res_url
+	*	@param String $subtitle
 	*	@return bool
 	*/
-	function create(Request $request, $path, $low_res_url, $high_res_url);
+	function create(Request $request, $path, $path_low, $low_res_url, $high_res_url, $subtitle);
 
 	/**
 	*	Update an image by ID

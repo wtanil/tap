@@ -25,6 +25,7 @@ class ProjectRepository implements ProjectInterface {
 			},
 
 			))
+			->orderBy('title', 'asc')
 			->get();
 	}
 
@@ -226,6 +227,48 @@ class ProjectRepository implements ProjectInterface {
 	function delete($id) {
 		$project = $this->forId($id);
 		return $project->delete();
+	}
+
+	/**
+	*	Search project by title
+	*
+	*	@param String $title
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function search($keyword) {
+		return Project::with(array(
+			'category' => function($query) {
+				$query->select('id', 'name');
+			},
+			'thumbnail' => function($query) {
+				$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
+			},
+
+			))
+			->where('title', 'like', '%' . $keyword . '%')
+			->orderBy('title', 'asc')
+			->get();
+	}
+
+	/**
+	*   Get all projects sorted
+	*
+	*	@param String $sortBy
+	*	@param String $order
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function allSorted($sortBy, $order) {
+		return Project::with(array(
+			'category' => function($query) {
+				$query->select('id', 'name');
+			},
+			'thumbnail' => function($query) {
+				$query->select('id', 'project_id', 'subtitle', 'low_res_url', 'high_res_url');
+			},
+
+			))
+			->orderBy($sortBy, $order)
+			->get();
 	}
 
 }

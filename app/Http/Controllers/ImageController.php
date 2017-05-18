@@ -76,18 +76,110 @@ class ImageController extends Controller
      */
     public function store(StoreImageRequest $request, $id)
     {
-        $baseImageName = time() . '-' . pathinfo($request->file('uploadedImage')->getClientOriginalName(), PATHINFO_FILENAME);
-        $baseImageExtension = '.' . $request->file('uploadedImage')->getClientOriginalExtension();
+
+        if ($request->hasFile('uploadedImage1')) {
+            $this->processImageUpload ($request, $request->file('uploadedImage1'), $request->input('description1'));
+        }
+
+        if ($request->hasFile('uploadedImage2')) {
+            $this->processImageUpload ($request, $request->file('uploadedImage2'), $request->input('description2'));
+        }
+
+        if ($request->hasFile('uploadedImage3')) {
+            $this->processImageUpload ($request, $request->file('uploadedImage3'), $request->input('description3'));
+        }
+
+        if ($request->hasFile('uploadedImage4')) {
+            $this->processImageUpload ($request, $request->file('uploadedImage4'), $request->input('description4'));
+        }
+
+        if ($request->hasFile('uploadedImage5')) {
+            $this->processImageUpload ($request, $request->file('uploadedImage5'), $request->input('description5'));
+        }
+
+        return redirect('/project/' . $id . '/images/create');
+
+        // foreach ($request->file('uploadedImages') as $uploadedImage) {
+        //     $baseImageName = time() . '-' . pathinfo($uploadedImage->getClientOriginalName(), PATHINFO_FILENAME);
+        //     $baseImageExtension = '.' . $uploadedImage->getClientOriginalExtension();
+        //     $highResImageName = $baseImageName . $baseImageExtension;
+        //     $lowResImageName = $baseImageName . '-low' . $baseImageExtension;
+
+        //     $path = $uploadedImage->storeAs('public/img', $highResImageName);        
+        //     $highResUrl = url('/') . '/storage/' . $path;
+
+        //     Storage::copy($path, 'public/img/'. $lowResImageName);
+
+        //     $maxWidth = 400;
+        //     $maxHeight = 400;
+
+        //     $lowResImage = ImageIntervention::make('storage/public/img/'. $lowResImageName);
+        //     if ($lowResImage->width() > $lowResImage->height()) {
+        //         $maxHeight = null;
+        //     } else {
+        //         $maxWidth = null;
+        //     }
+        //     $lowResImage->resize($maxWidth, $maxHeight, function ($constraint) {
+        //         $constraint->aspectRatio();
+        //         $constraint->upsize();
+        //     });
+
+        //     $lowResImage->save();
+        //     $lowResUrl = url('/') . '/storage/public/img/' . $lowResImageName;
+
+        //     $createdId = $this->image->create($request, $path, $lowResUrl, $highResUrl);
+
+        // }
+
+        // $baseImageName = time() . '-' . pathinfo($request->file('uploadedImage')->getClientOriginalName(), PATHINFO_FILENAME);
+        // $baseImageExtension = '.' . $request->file('uploadedImage')->getClientOriginalExtension();
+        // $highResImageName = $baseImageName . $baseImageExtension;
+        // $lowResImageName = $baseImageName . '-low' . $baseImageExtension;
+
+        // $path = $request->file('uploadedImage')->storeAs('public/img', $highResImageName);        
+        // $highResUrl = url('/') . '/storage/' . $path;
+
+        // Storage::copy($path, 'public/img/'. $lowResImageName);
+
+        // $maxWidth = 300;
+        // $maxHeight = 300;
+
+        // $lowResImage = ImageIntervention::make('storage/public/img/'. $lowResImageName);
+        // if ($lowResImage->width() > $lowResImage->height()) {
+        //     $maxHeight = null;
+        // } else {
+        //     $maxWidth = null;
+        // }
+        // $lowResImage->resize($maxWidth, $maxHeight, function ($constraint) {
+        //     $constraint->aspectRatio();
+        //     $constraint->upsize();
+        // });
+
+        // $lowResImage->save();
+        // $lowResUrl = url('/') . '/storage/public/img/' . $lowResImageName;
+
+        // $createdId = $this->image->create($request, $path, $lowResUrl, $highResUrl);
+
+        // return redirect('/project/' . $id . '/images/create');
+    }
+
+    private function processImageUpload ($request, $uploadedImage, $subtitle) {
+
+        $baseImageName = time() . '-' . pathinfo($uploadedImage->getClientOriginalName(), PATHINFO_FILENAME);
+        $baseImageExtension = '.' . $uploadedImage->getClientOriginalExtension();
         $highResImageName = $baseImageName . $baseImageExtension;
         $lowResImageName = $baseImageName . '-low' . $baseImageExtension;
 
-        $path = $request->file('uploadedImage')->storeAs('public/img', $highResImageName);        
+        $path = $uploadedImage->storeAs('public/img', $highResImageName);
+
+        $pathLow = 'public/img/' . $lowResImageName;
+
         $highResUrl = url('/') . '/storage/' . $path;
 
-        Storage::copy($path, 'public/img/'. $lowResImageName);
+        Storage::copy($path, $pathLow);
 
-        $maxWidth = 300;
-        $maxHeight = 300;
+        $maxWidth = 400;
+        $maxHeight = 400;
 
         $lowResImage = ImageIntervention::make('storage/public/img/'. $lowResImageName);
         if ($lowResImage->width() > $lowResImage->height()) {
@@ -102,10 +194,9 @@ class ImageController extends Controller
 
         $lowResImage->save();
         $lowResUrl = url('/') . '/storage/public/img/' . $lowResImageName;
+        
 
-        $createdId = $this->image->create($request, $path, $lowResUrl, $highResUrl);
-
-        return redirect('/project/' . $id . '/images/create');
+        $createdId = $this->image->create($request, $path, $pathLow, $lowResUrl, $highResUrl, $subtitle);
     }
 
     /**
@@ -162,6 +253,7 @@ class ImageController extends Controller
         $tmpProject = $this->project->forId($projectId);
         $tmpImage = $this->image->forId($imageId);
         $tmpImagePath = $tmpImage->path;
+        $tmpImageLowPath = $tmpImage->path_low;
 
         if ($tmpProject->thumbnail_id == $imageId) {
 
@@ -182,6 +274,7 @@ class ImageController extends Controller
         // TODO DELETE IMAGE FILE
 
         Storage::delete($tmpImagePath);
+        Storage::delete($tmpImageLowPath);
 
         return redirect('/project/' . $projectId . '/edit');
     }

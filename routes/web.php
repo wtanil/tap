@@ -17,7 +17,7 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'ProjectController@index');
 // Route::get('/home', 'HomeController@index');
 
 
@@ -39,7 +39,8 @@ Route::put('/project/{id}/thumbnail', 'ProjectController@updateThumbnail');
 Route::delete('/project/{id}', 'ProjectController@destroy');
 
 // Route::get('/category/store', 'HomeController@createCategory');
-
+Route::post('/category', 'ProjectController@filter');
+Route::post('/project/search', 'ProjectController@search');
 
 Route::get('/project/{id}/images/create', 'ImageController@create');
 Route::post('/project/{id}/images', 'ImageController@store');

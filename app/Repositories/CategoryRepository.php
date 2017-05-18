@@ -28,6 +28,21 @@ class CategoryRepository implements CategoryInterface {
 	}
 
 	/**
+	*	Get projects for category by ID
+	*
+	*	@param  int  $id
+	*	@param  String  $sortBy
+	*	@param  String  $sortBy
+	*   @return \Illuminate\Database\Eloquent\Collection
+	*/
+	function getProjects($id, $sortBy, $order) {
+		return $this->forId($id)
+		->projects()
+		->orderBy($sortBy, $order)
+		->get();
+	}
+
+	/**
 	*	Store a new category
 	*
 	*	@param \Illuminate\Http\Request $request

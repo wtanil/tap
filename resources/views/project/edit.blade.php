@@ -10,11 +10,11 @@
 
 	<div class="row">
 
-        <a class="btn btn-default" href="{{ url('/#project' . $project->id) }}" role="button">Back</a>
-        
-    </div>
+		<a class="btn btn-default" href="{{ url('/#project' . $project->id) }}" role="button">Back</a>
 
-    <br>
+	</div>
+
+	<br>
 
 
 	<div class="row" id="details">
@@ -100,8 +100,16 @@
 						</div>
 					</div>
 
+				</form>
 
-
+				<form action="{{ url('project/' . $project->id) }}" method="POST" class="form-horizontal">
+					{{ csrf_field() }}
+					{{ method_field('DELETE') }}
+					<div class="form-group">
+						<div class="col-sm-offset-3 col-sm-6">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+						</div>
+					</div>
 				</form>
 				<!--panel body-->
 			</div>
@@ -151,16 +159,16 @@
 							</td>
 							<td class="col-xs-1">
 								@if ($image->id == $project->thumbnail_id)
-									<button class="btn btn-default btn-sm" disabled>Thumbnail</button>
-									
-								@else
-									<form action="{{ url('project/' . $project->id . '/thumbnail') }}" method="POST" class="form-horizontal">
-										{{ csrf_field() }}
-										{{ method_field('PUT') }}
-										<input type="hidden" class="form-control" name="thumbnailId" id="thumbnailId" value="{{ $image->id }}">
+								<button class="btn btn-default btn-sm" disabled>Thumbnail</button>
 
-										<button type="submit" class="btn btn-default btn-sm">Thumbnail</button>
-									</form>
+								@else
+								<form action="{{ url('project/' . $project->id . '/thumbnail') }}" method="POST" class="form-horizontal">
+									{{ csrf_field() }}
+									{{ method_field('PUT') }}
+									<input type="hidden" class="form-control" name="thumbnailId" id="thumbnailId" value="{{ $image->id }}">
+
+									<button type="submit" class="btn btn-default btn-sm">Thumbnail</button>
+								</form>
 								@endif
 							</td>
 							<td class="col-xs-1">
@@ -170,7 +178,7 @@
 								<form action="{{ url('project/' . $project->id . '/images/' . $image->id) }}" method="POST">
 									{{ csrf_field() }}
 									{{ method_field('DELETE') }}
-									<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+									<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
 								</form>
 							</td>
 						</tr>

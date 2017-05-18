@@ -8,6 +8,7 @@ use App\Contracts\CategoryInterface;
 use App\Contracts\ImageInterface;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Requests\StoreProjectRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -27,15 +28,23 @@ class ProjectController extends Controller
     protected $category;
 
     /**
+     * The image repository instance
+     *
+     * @var ImageInterface
+     */
+    protected $image;
+
+    /**
      * Create a new project instance.
      *
      * @return void
      */
-    public function __construct(ProjectInterface $project, CategoryInterface $category)
+    public function __construct(ProjectInterface $project, CategoryInterface $category, ImageInterface $image)
     {
         $this->middleware('auth');
         $this->project = $project;
         $this->category = $category;
+        $this->image = $image;
     }
 
     /**
@@ -45,7 +54,14 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return redirect('/');
+        $allProject = $this->project->all();
+        $categories = $this->category->all();
+        return view('home', [
+            'currentSortId' => 0,
+            'currentCategoryId' => 0,
+            'projects' => $allProject,
+            'categories' => $categories
+            ]);
 
     }
 
@@ -167,8 +183,116 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
+
+        // TODO delete all images associated to this project
+
+
+        $tmpProject = $this->project->forId($id);
+        $tmpImages = $this->project->getImages($id);
+
+        foreach ($tmpImages as $tmpImage) {
+
+
+            if ($tmpProject->thumbnail_id == $tmpImage->id) {
+
+                $this->project->setThumbnail(null, $id);
+                $this->project->setActive(0, $id);
+
+            }
+
+            $this->image->delete($tmpImage->id);
+
+            Storage::delete($tmpImage->path);
+            Storage::delete($tmpImage->path_low);
+        }
+
         $this->project->delete($id);
 
         return redirect('/');
     }
+
+    /**
+     * Filter by category
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request)
+    {
+
+        $categoryId = $request->input('categoryId');
+        $sortId = $request->input('sortId');
+
+        $sortBy = 'title';
+        $order = 'asc';
+
+        if ($request->has('sortId')) {
+            if ($sortId == 1) {
+                $sortBy = 'title';
+                $order = 'asc';
+            } else if ($sortId == 2) {
+                $sortBy = 'title';
+                $order = 'desc';
+            } else if ($sortId == 3) {
+                $sortBy = 'created_at';
+                $order = 'asc';
+            } else if ($sortId == 4) {
+                $sortBy = 'created_at';
+                $order = 'desc';
+            }
+        }
+
+        $allProject = $this->project->allSorted($sortBy, $order);
+
+        if ($request->has('categoryId')) {
+            $allProject = $this->category->getProjects($categoryId, $sortBy, $order);
+        }
+        
+        $categories = $this->category->all();
+        return view('home', [
+            'currentSortId' => $sortId,
+            'currentCategoryId' => $categoryId,
+            'projects' => $allProject,
+            'categories' => $categories
+            ]);
+
+    }
+
+    /**
+     * Search by title
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $allProject = $this->project->all();
+
+        if ($request->has('searchKey')) {
+            $allProject = $this->project->search($request->input('searchKey'));
+        }
+
+        $categories = $this->category->all();
+        return view('home', [
+            'currentSortId' => 0,
+            'currentCategoryId' => 0,
+            'projects' => $allProject,
+            'categories' => $categories
+            ]);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
