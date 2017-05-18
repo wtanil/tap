@@ -37,7 +37,7 @@ class ProjectRepository implements ProjectInterface {
 	function allApi() {
 		// return Project::all();
 
-		return Project::with(array(
+		$projects = Project::with(array(
 			'category' => function($query) {
 				$query->select('id', 'name');
 			},
@@ -49,6 +49,10 @@ class ProjectRepository implements ProjectInterface {
 			->select('id', 'category_id', 'thumbnail_id', 'title')
 			->where('active', 1)
 			->get();
+
+		$shuffled = $projects->shuffle();
+
+		return $shuffled;
 	}
 
 	/**
